@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+  enter_data_service:
+    build: ./enter_app
+    container_name: enter_data_service
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql_db
+      - auth_service
+  
+  show_data_service:
+    build: ./show_data
+    container_name: show_data_service
+    ports:
+      - "8000:8080"
+    depends_on:
+      - auth_service
+      - mongodb
+
+
+  analytics_service:
+    build: ./Analytics
+    container_name: analytics_service
+    depends_on:
+      - mysql_db
+      - mongodb
+
+  auth_service:
+    build: ./auth
+    container_name: auth_service
+    depends_on:
+      - mysql_db
+
+
+  mysql_db:
+    image: mysql:5.7
+    container_name: mysql_db
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: my_db
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+ 
+volumes:
+  db_data:
+  mongo_data:
