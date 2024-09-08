@@ -36,7 +36,7 @@ def login():
                 session['username'] = username  # Store username in session
                 return redirect(url_for('show_data'))  
             else:
-                msg = "Invalid login credentials"  # Display message on invalid login
+                msg = "Invalid login credentials"  
         except requests.exceptions.RequestException as e:
             msg = f"Error communicating with the auth service: {e}"  # Display error message
 
