@@ -2,6 +2,7 @@ version: '3'
 
 services:
   enter_data_service:
+    image: aymanattili/enter_data_service:latest
     build: ./enter_app
     container_name: enter_data_service
     ports:
@@ -11,6 +12,7 @@ services:
       - auth_service
   
   show_data_service:
+    image: aymanattili/show_data_service:latest
     build: ./show_data
     container_name: show_data_service
     ports:
@@ -19,8 +21,8 @@ services:
       - auth_service
       - mongodb
 
-
   analytics_service:
+    image: aymanattili/analytics_service:latest
     build: ./Analytics
     container_name: analytics_service
     depends_on:
@@ -28,18 +30,16 @@ services:
       - mongodb
 
   auth_service:
+    image: aymanattili/auth_service:latest
     build: ./auth
     container_name: auth_service
     depends_on:
       - mysql_db
 
-
   mysql_db:
     image: mysql:5.7
     container_name: mysql_db
     restart: always
-    ports:
-      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: my_db
@@ -51,8 +51,6 @@ services:
     image: mongo:latest
     container_name: mongodb
     restart: always
-    ports:
-      - "27017:27017"
     volumes:
       - mongo_data:/data/db
  
